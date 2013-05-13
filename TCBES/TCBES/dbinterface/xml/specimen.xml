@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<formoption>
+
+ <relvar>
+   specimen
+ </relvar>
+ 
+ <action>
+   <attribute>
+    cabinet_code
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       container
+     </prftch_relvar>
+     <prftch_attribute>
+       cabinet_code
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       container
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+ <action>
+   <attribute>
+    section_code
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       container
+     </prftch_relvar>
+     <prftch_attribute>
+       section_code
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       container
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+  <action>
+   <attribute>
+    box_code
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       container
+     </prftch_relvar>
+     <prftch_attribute>
+       box_code
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       container
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+ <action>
+   <attribute>
+    sex_code
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       sex
+     </prftch_relvar>
+     <prftch_attribute>
+       sex_code
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       sex
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+ <action>
+   <attribute>
+    status_code
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       preservation_status
+     </prftch_relvar>
+     <prftch_attribute>
+       status_code
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       preservation_status
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+</formoption>

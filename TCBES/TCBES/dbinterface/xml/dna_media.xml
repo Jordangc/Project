@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<formoption>
+
+ <relvar>
+   dna_media
+ </relvar>
+ 
+ <action>
+   <attribute>
+    extraction_code
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       dna
+     </prftch_relvar>
+     <prftch_attribute>
+       extraction_code
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       dna
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+ <action>
+   <attribute>
+    media_id
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       media
+     </prftch_relvar>
+     <prftch_attribute>
+       media_id
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       media
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+</formoption>

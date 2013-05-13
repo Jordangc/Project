@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<formoption>
+
+ <relvar>
+   reserve
+ </relvar>
+ 
+ <action>
+ 
+   <attribute>
+     permission_type
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       reserve_permission
+     </prftch_relvar>
+     <prftch_attribute>
+       permission_type
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       reserve_permission
+     </new_relvar>
+   </newentry>
+   
+ </action>
+ 
+</formoption>

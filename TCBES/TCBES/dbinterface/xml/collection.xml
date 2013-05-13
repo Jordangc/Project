@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<formoption>
+
+ <relvar>
+   collection
+ </relvar>
+ 
+  <action>
+   <attribute>
+     event_code
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       event
+     </prftch_relvar>
+     <prftch_attribute>
+       event_code
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       event
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+ <action>
+   <attribute>
+     short_scientific_name
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       life
+     </prftch_relvar>
+     <prftch_attribute>
+       short_scientific_name
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       life
+     </new_relvar>
+   </newentry>
+   
+ </action>
+</formoption>

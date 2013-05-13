@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<formoption>
+
+ <relvar>
+   life_media
+ </relvar>
+ 
+ <action>
+   <attribute>
+    short_scientific_name
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       life
+     </prftch_relvar>
+     <prftch_attribute>
+       short_scientific_name
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       life
+     </new_relvar>
+   </newentry>
+   
+ </action>
+ 
+  <action>
+   <attribute>
+    media_id
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       media
+     </prftch_relvar>
+     <prftch_attribute>
+       media_id
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       media
+     </new_relvar>
+   </newentry>
+   
+ </action>
+ 
+ 
+</formoption>

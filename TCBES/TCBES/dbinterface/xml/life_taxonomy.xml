@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<formoption>
+
+ <relvar>
+   life_taxonomy
+ </relvar>
+ 
+ <action>
+   <attribute>
+    rank_name
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       taxonomy_rank
+     </prftch_relvar>
+     <prftch_attribute>
+       rank_name
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       taxonomy_rank
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+<action>
+   <attribute>
+    rank_type
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       taxonomy_rank
+     </prftch_relvar>
+     <prftch_attribute>
+       rank_type
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       taxonomy_rank
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+ <action>
+   <attribute>
+    short_scientific_name
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       life
+     </prftch_relvar>
+     <prftch_attribute>
+       short_scientific_name
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       life
+     </new_relvar>
+   </newentry>
+ </action>
+
+</formoption>

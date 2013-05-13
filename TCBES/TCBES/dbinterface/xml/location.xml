@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<formoption>
+
+ <relvar>
+   location
+ </relvar>
+ 
+ <action>
+ 
+   <attribute>
+     island_name
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       island
+     </prftch_relvar>
+     <prftch_attribute>
+       island_name
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       island
+     </new_relvar>
+   </newentry>
+   
+ </action>
+ 
+  <action>
+ 
+   <attribute>
+     reserve_name
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       reserve
+     </prftch_relvar>
+     <prftch_attribute>
+       reserve_name
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       reserve
+     </new_relvar>
+   </newentry>
+   
+ </action>
+ 
+ <action>
+ 
+   <attribute>
+     locality_name
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       locality
+     </prftch_relvar>
+     <prftch_attribute>
+       locality_name
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       locality
+     </new_relvar>
+   </newentry>
+   
+ </action>
+ 
+</formoption>

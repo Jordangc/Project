@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<create>
+ <interface>
+   collector
+ </interface>
+ 
+ <interface>
+   location
+ </interface>
+ 
+ <interface>
+   event
+ </interface>
+ 
+ <interface>
+   event_collector
+ </interface>
+ 
+ <interface>
+   collection
+ </interface>
+ 
+  <interface>
+   specimen
+ </interface>
+ 
+ <interface>
+   dna
+ </interface>
+ 
+  <interface>
+   specimen_dna
+ </interface>
+ 
+</create>

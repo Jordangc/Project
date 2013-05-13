@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<formoption>
+
+ <relvar>
+   container
+ </relvar>
+ 
+ <action>
+   <attribute>
+    abbr4_organization
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       organization
+     </prftch_relvar>
+     <prftch_attribute>
+       abbr4_organization
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       organization
+     </new_relvar>
+   </newentry>
+   
+ </action>
+</formoption>

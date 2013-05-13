@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<formoption>
+
+ <relvar>
+   media
+ </relvar>
+ 
+<action>
+   <attribute>
+    media_id
+   </attribute>
+   
+   <default_value>
+     <eval>
+       PHP code
+     </eval>
+     <static>
+       Static value
+     </static>
+   </default_value>
+ </action>
+ 
+ <action>
+   <attribute>
+    file_format
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       media_type
+     </prftch_relvar>
+     <prftch_attribute>
+       file_format
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       media_type
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+</formoption>

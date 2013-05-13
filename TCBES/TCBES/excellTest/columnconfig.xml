@@ -1,0 +1,97 @@
+﻿<?xml version="1.0"?>
+<config>
+<!-- no matches tags can contain the same values also make the mactches lowercase -->
+<column>
+	<attributename>specimen.specimen_code</attributename>
+	<matches>id</matches>
+	<matches>id code</matches>
+</column>
+<column>
+	<attributename>collection.number_sample</attributename>
+	<matches># of samples</matches>
+	<matches>#</matches>
+	<matches>no. of samples</matches>
+</column>
+<column>
+	<attributename>reserve.reserve_name</attributename>
+	<matches>site</matches>
+</column>
+<column>
+	<attributename>location.island_name</attributename>
+	<matches>is.</matches>
+	<matches>island</matches>
+</column>
+<column>
+	<attributename>event.date</attributename>
+	<matches>date</matches>
+	<matches>coll</matches>
+	<matches>collection</matches>
+	<matches>coll. date</matches>
+</column>
+<column>
+	<attributename>event.event_code</attributename>
+	<matches>event code</matches>
+</column>
+<column>
+	<attributename>container.cabinet_code</attributename>
+	<matches>cabinet code</matches>
+</column>
+<column>
+	<attributename>container.box_code</attributename>
+	<matches>box code</matches>
+</column>
+<column>
+	<attributename>container.section_code</attributename>
+	<matches>section code</matches>
+</column>
+<column>
+	<attributename>organization.abbr4_organization</attributename>
+	<matches>organization</matches>
+</column>
+<column>
+	<attributename>sex.sex_code</attributename>
+	<matches>sex</matches>
+</column>
+<column>
+	<attributename>preservation_status.status_code</attributename>
+	<matches>preservation</matches>
+</column>
+<column>
+	<attributename>collection.catalog_code</attributename>
+	<matches>catalog code</matches>
+</column>
+
+<combined>
+	<attributename>collection.short_scientific_name</attributename>
+	<part length="3">genus</part>
+	<part length="3">species</part>
+	<part length="3">subspecies</part>
+</combined>
+<!-- the following values are not actual db column names -->
+<column>
+	<partname>genus</partname>
+	<matches>genus</matches>
+	<matches>genera</matches>
+	<matches>genus</matches>
+</column>
+<column>
+	<partname>species</partname>
+	<matches>species</matches>
+	<matches>sp.</matches>
+	<matches>spp.</matches>
+	<matches>species</matches>
+</column>
+<column>
+	<partname>subspecies</partname>
+	<matches>subspecies</matches>
+	<matches>subsp.</matches>
+	<matches>subspp.</matches>
+	<matches>subspecies</matches>
+</column>
+<column>
+	<partname>variety</partname>
+	<matches>variety</matches>
+	<matches>var.</matches>
+	<matches>variety</matches>
+</column>
+</config>

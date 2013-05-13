@@ -1,0 +1,13 @@
+﻿<?xml version="1.0"?>
+<Config>
+<Column>
+	<DBName>specimen.specimen_code</DBName>
+	<matches>ID</matches>
+	<matches>ID Code</matches>
+</Column>
+<Column>
+	<DBName>collection.number_sample</DBName>
+	<matches># of Samples</matches>
+	<matches>No. of samples</matches>
+</Column>
+</Config>

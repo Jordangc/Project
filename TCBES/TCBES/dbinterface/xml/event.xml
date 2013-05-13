@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<formoption>
+
+ <relvar>
+   event
+ </relvar>
+ 
+ <action>
+   <attribute>
+    abbr3_collector
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       collector
+     </prftch_relvar>
+     <prftch_attribute>
+       abbr3_collector
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       collector
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+  <action>
+   <attribute>
+    island_name
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       island
+     </prftch_relvar>
+     <prftch_attribute>
+       island_name
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       island
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+  <action>
+   <attribute>
+    locality_name
+   </attribute>
+   
+   <asyncfetch>
+     <async_relvar>
+       locality
+     </async_relvar>
+     <async_attribute>
+       locality_name
+     </async_attribute>
+   </asyncfetch>
+ </action>
+ 
+ <action>
+   <attribute>
+    reserve_name
+   </attribute>
+   
+   <asyncfetch>
+     <async_relvar>
+       reserve
+     </async_relvar>
+     <async_attribute>
+       reserve_name
+     </async_attribute>
+   </asyncfetch>
+ </action>
+ 
+ <action>
+   <attribute>
+    date
+   </attribute>
+   
+   <default_value>
+     <eval>
+       PHP code
+     </eval>
+     <static>
+       Static value
+     </static>
+   </default_value>
+ </action>
+ 
+</formoption>

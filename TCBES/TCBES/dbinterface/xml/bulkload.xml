@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<excel_load_config>
+
+<worksheets>
+  <worksheet_name>
+    coll
+  </worksheet_name>
+  <worksheet_name>
+    extr
+  </worksheet_name>
+</worksheets>
+
+<reference>
+  <worksheet_name>
+    coll
+  </worksheet_name>
+  <excel_field_name>
+    box
+  </excel_field_name>
+  <db_relvar_name>
+    container
+  </db_relvar_name>
+  <db_attribute_name>
+    box_code
+  </db_attribute>
+</reference>
+
+</excel_load_config>

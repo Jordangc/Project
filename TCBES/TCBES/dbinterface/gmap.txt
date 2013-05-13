@@ -1,0 +1,46 @@
+    var latlng = new google.maps.LatLng(19.701188427564357, -155.08096042690278);
+    var myOptions = {
+      zoom: 11,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.HYBRID
+    };
+	var map = new google.maps.Map(document.getElementById("map_canvas_m0001"), myOptions);
+    setMarkers(map, specimen);
+	
+	
+	var specimen = [["Hilo1, HI", 19.701188427564357, -155.08096042690278, 4]];
+
+function setMarkers(map, locations) {
+	  
+	  var image = "images/mark.png";
+
+  for (var i = 0; i < locations.length; i++) {
+    var beach = locations[i];
+    var myLatLng = new google.maps.LatLng(beach[1], beach[2]);
+    var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map
+    });
+  }
+  
+  var myLatlng = new google.maps.LatLng(19.701188427564357, -155.08096042690278);
+
+var contentString = [
+    ('')
+	];
+
+var infowindow = new google.maps.InfoWindow({
+    content: contentString[1]
+});
+
+var marker = new google.maps.Marker({
+    position: myLatlng,
+    map: map,
+    title:""
+});
+
+google.maps.event.addListener(marker, "click", function() {
+  infowindow.open(map,marker);
+});
+
+}';

@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<formoption>
+
+ <relvar>
+   event_collector
+ </relvar>
+ 
+ <action>
+   <attribute>
+    event_code
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       event
+     </prftch_relvar>
+     <prftch_attribute>
+       event_code
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       event
+     </new_relvar>
+   </newentry>
+   
+ </action>
+ 
+  <action>
+   <attribute>
+    event_code
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       event
+     </prftch_relvar>
+     <prftch_attribute>
+       event_code
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       event
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+ <action>
+   <attribute>
+    abbr3_collector
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       collector
+     </prftch_relvar>
+     <prftch_attribute>
+       abbr3_collector
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       collector
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+</formoption>

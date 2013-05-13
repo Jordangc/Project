@@ -1,0 +1,413 @@
+<?php
+class DBEHSP
+{
+  //file layout and navigation
+  private $xsl_directory_path = './';
+  private $xml_directory_path = 'xml/';
+  private $login_page = 'index.php';
+  private $logout_page = 'index.php';
+  
+  //mysql
+  private $hostname_connDBEHSP = 'localhost';
+  private $database_connDBEHSP = 'ehsp';
+  private $username_connDBEHSP = 'andagiboja';
+  private $password_connDBEHSP = 'konagold';
+  
+  //globals
+  private $form_option_array = array(); //function formOption
+  
+  //housekeeping
+  private $notice = array();
+  public $debug = false;
+  
+  function __construct()
+  {}
+
+  function __destruct()
+  {}
+
+  private function array2xml($source_array,$relvar_name,$catalog_name='relvar', $element_name='attribute')
+  {
+    $xml =''; /*$xml = '<?xml version="1.0"?>';*/
+	$xml .= '<'.$catalog_name.'>';
+	$xml .= '<relvar_name>'.$relvar_name.'</relvar_name>';
+	foreach($source_array as $record)
+	{
+	  $xml .= '<'.$element_name.'>';
+	    foreach($record as $assoc_index=>$record_value)
+		{
+		  $xml .= '<'.$assoc_index.'>';
+		  $xml .= $record_value;
+		  $xml .= '</'.$assoc_index.'>';
+		}
+	  $xml .= '</'.$element_name.'>';
+	}
+	$xml .= '</'.$catalog_name.'>';
+	
+
+	$relvar = new simpleXMLElement($xml);
+	foreach($relvar->attribute as $attribute)
+	{
+	  foreach($attribute->Field as $field)
+	  {
+	    $label = preg_split('/_/',$field);            //split form name/id and generate label name
+		$label_name ='';
+		foreach($label as $label_id=>$name)
+		{
+		    $label_name .= $name.' ';
+	    }
+		$regexp = '/<Field> *'.$field.' *<\/Field>/';
+		$xml = preg_replace($regexp,'<Field>'.$field.'</Field>."n".<label>'.$label_name.'</label>',$xml);
+	  }
+	}
+	return $xml;
+  }
+  
+  public function getInterface()
+  {
+    $xsl_file = 'c_form.xsl';
+	
+	$tables_array = array();
+	$num_tables_record = 0;
+	$connDBEHSP = mysql_connect($this->hostname_connDBEHSP, $this->username_connDBEHSP, $this->password_connDBEHSP) or trigger_error(mysql_error(),E_USER_ERROR);
+    mysql_select_db($this->database_connDBEHSP, $connDBEHSP);
+    $sql_tables = 'show tables';
+    $tables_record = mysql_query($sql_tables, $connDBEHSP) or die(mysql_error());
+    $num_tables_record = mysql_num_rows($tables_record);
+	
+	if($num_tables_record>0)
+	{
+	  while($tables_array = mysql_fetch_assoc($tables_record))
+	  {
+	    $relvar_name = $tables_array['Tables_in_'.$this->database_connDBEHSP];      //COMPATIBILITY CHECK
+	    $array_result = array();
+	    $connDBEHSP = mysql_connect($this->hostname_connDBEHSP, $this->username_connDBEHSP, $this->password_connDBEHSP) or trigger_error(mysql_error(),E_USER_ERROR);
+        mysql_select_db($this->database_connDBEHSP, $connDBEHSP);
+        $query_string = sprintf("describe %s", $relvar_name);
+        $raw_result = mysql_query($query_string, $connDBEHSP) or die(mysql_error());
+        $num_raw_result = mysql_num_rows($raw_result);
+
+	    while($record = mysql_fetch_assoc($raw_result))
+	    {
+	      array_push($array_result, $record);                                        //Associative Array
+	    }
+	
+	    $xsl = new DOMDocument();
+	    $xml = new DOMDocument();
+	
+	    $xml -> /*load('test_data/test.xml');*/loadXML($this->array2xml($array_result,$relvar_name));                      //Convert array to XML
+	
+	    if(file_exists($this->xsl_directory_path.$xsl_file))
+	    {
+	      $xsl->/*load('test_data/test.xsl'); */load($this->xsl_directory_path.$xsl_file);
+	      $xslt = new XSLTProcessor();
+	      $xslt->importStylesheet($xsl);
+	      $form = $xslt->transformToXML($xml);
+	    }
+	    else
+	    {
+	      $form='XSL file is not present:'.$this->xsl_directory_path.$xsl_file;
+	    }
+		
+	    $form = str_replace('[[HANDLER]]',$_SERVER['PHP_SELF'],$form);  //landing page
+	    $form = preg_replace('/(<\? *xml)+( *[A-Za-z0-9]* *= *"* *[A-Za-z0-9.]* *"* *)+(\?>)+/','',$form);            //remove xml declaration
+		$this->formOption($relvar_name);
+		//$form .= $this->form_option_array[$relvar_name];
+		//print_r($this->form_option_array[$relvar_name]);
+		//Form option specified with XML applied
+        foreach($this->form_option_array as $target=>$elements)
+		{
+		  foreach($elements as $element_id=>$element_value)  //DOM identified by "relvarname_attributename"
+		  {
+		    $element_value = preg_replace('/(<\? *xml)+( *[A-Za-z0-9]* *= *"* *[A-Za-z0-9.]* *"* *)+(\?>)+/','',$element_value); 
+		    $regexp = '/< *input( *[A-Za-z0-9]* *= *"*[A-Za-z0-9_]*"*)*( *id *= *"*'.trim($target).'_'.trim($element_id).'"*)+( *[A-Za-z0-9]* *= *"*[A-Za-z0-9_]*"*)* *\/>/';
+		    $form = preg_replace($regexp,$element_value,$form);
+//if($this->debug){ echo $regexp;}
+	      }
+		}
+		$this->getNotice();
+		echo $form;
+if($this->debug)
+{
+  echo '<p>[Debug (Check Match): ', $relvar_name; echo' / '; print_r($this->form_option_array[$relvar_name]);echo']</p>';
+  $this->getNotice();
+}
+	  }
+	}
+	mysql_close($connDBEHSP);
+  }
+  
+  public function set_xsl_directory_path($directory_path)
+  {
+    if(file_exists($directory_path))
+	{
+      $this->xsl_directory_path = $directory_path;
+	  return true;
+	}
+	else
+	{
+	  return false;
+	}
+  }
+  
+  public function auth_login($user_name, $passwd)
+  {
+
+	  $connDBEHSP = mysql_connect($this->hostname_connDBEHSP, $this->username_connDBEHSP, $this->password_connDBEHSP) or trigger_error(mysql_error(),E_USER_ERROR);
+      mysql_select_db($this->database_connDBEHSP, $connDBEHSP);
+      $query_string_al = sprintf('select abbr3_collector, first_name, last_name, email from collector where abbr3_collector = %s and passwd = %s;', $user_name, $passwd);
+	  $raw_result_al = mysql_query($query_string_al, $connDBEHSP) 
+	  or die(($this->debug)?mysql_error():'<html><head><title>Error Page</title></head><body><p><h1>Bad Request</h1><a href="index.php">Go back.</a></p></body></html>'); //Query execution
+	  $num_raw_result = mysql_num_rows($raw_result_al);
+	//session_start();
+    if($num_raw_result==1)  //think twice
+    {
+	  $log_user = mysql_fetch_assoc($raw_result_al);
+	  $_SESSION['uid'] = $log_user['abbr3_collector'];
+	  $_SESSION['user_first'] = $log_user['first_name'];
+      $_SESSION['user_last'] = $log_user['last_name'];	
+      $_SESSION['user_email'] = $log_user['email'];
+	  
+	  mysql_close($connDBEHSP);
+	  return true;
+	}
+	else
+	{
+	  mysql_close($connDBEHSP);
+	  return false;
+	}
+  }
+  
+  public function auth_logout()
+  {
+    session_unset();
+    session_destroy();
+	unset($_SESSION); 
+	header($login_page);
+	//header("Location: http://".$_SERVER[HTTP_HOST].$_SERVER[REQUEST_URI]);
+  }
+  
+  public function userInfo()
+  {
+    if($_SESSION['uid'])
+	{
+	  $current_user = $_SESSION['user_first'].' '.$_SESSION['user_last'].'  (Not '.$_SESSION['user_first'].'? <form style="display:inline;" action="'.basename($_SERVER['PHP_SELF']).'" method="post" name="logout_form" id="logout_form"><input type="submit" name="submit" id="submit" value="Logout" /></form>)';
+	}
+	else
+	{
+	  $current_user = '<a href='.$this->login_page.'>login</a>';
+	}
+	echo 'You are logged in as ', $current_user;
+  }
+  
+  public function is_login()
+  {
+    return ($_SESSION['uid'])? true:false;
+  }
+  
+  public function request_handler() //always called first
+  {
+    //error index: input error
+    session_start();
+	/*if(isset)($_COOKIE)
+	{
+	  foreach($_COOKIE as $cookie_name=>$cookie_value)
+	  {
+	    
+	  }
+	}*/
+    if(isset($_POST))
+	{	
+//if($this->debug)print_r ($_POST);
+	  if(isset($_POST['submit']))
+	  {
+	    switch($_POST['submit'])                                          //Login handling
+	    {
+		  case 'Login': 
+		               if(!($this->auth_login($this->quote($_POST['user_name']),$this->quote($_POST['password']))))
+		               {
+					     $this->notice['Login Failure'] = 'Wrong user name and/or password.';
+					   }
+		             break;
+		  case 'Logout': $this->auth_logout();
+		             break;
+	      default:
+		             break;
+	    }
+		//form handling
+		//input check handling here
+		foreach($_POST as $form_element=>$element_value)                 //form_element = name
+		{
+		  if($_POST['req_'.$form_element] == 1)                          //if required field is empty
+		  {
+		    if($element_value == '') //think twice, unique etc...
+			{
+			  //Input validation
+			  
+			  $label = preg_split('/_/',$form_element);            //split form name/id and generate label name
+			  $label_name ='';
+			  foreach($label as $label_id=>$name)
+			  {
+			    if($label_id>0)
+				{
+			      $label_name .= $name.' ';
+				}
+			  }
+//if($this->debug)print_r($label_name);
+			  $this->notice[$form_element] = '"<em class="warning">'.$label_name.'</em>" is required.'.' <a href="#'.$form_element.'">Check</a> ';
+			}
+		  }
+		}
+	  }
+	}
+	$this->getNotice();
+  }
+  
+  private function quote($text)
+  {
+    return 
+     "'".
+     htmlspecialchars((get_magic_quotes_gpc() ?
+	 stripslashes($text) :
+	 addslashes($text)))
+	 ."'";
+  }
+  
+  public function getNotice()
+  {
+    if($this->notice)
+	{
+      echo '<ul class="warnings">';
+      foreach ($this->notice as $error_section=>$error_content)
+	  {
+        echo '<li>'.$error_content.'</li>';
+	  }
+	  echo '</ul>';
+	  $this->notice = array();
+	}
+  }
+  
+  public function getLogin() //Login Form
+  {
+    echo '<p>Please sign in:</p>
+		<form action="',basename($_SERVER['PHP_SELF']),'" method="POST" name="login_form" id="login_form">
+        <label for="user_name">User Name</label>
+        <input type="text" name="user_name" id="user_name" />
+        <br />
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" />
+        <br />
+		<label for="persistentlogin">Remember Me</label>
+		<input type="checkbox" name="persistentcookie" value="login">
+		<br/>
+        <label for="submit">Submit</label>
+        <input type="submit" name="submit" id="submit" value="Login" />
+        </form>';
+  }
+  
+  private function formOption($relvar_name)                                     //Form detail controll xml
+  {
+    //error index: Form Option
+	$form_option_xsl = 'o_select.xsl';
+																				//Load XML
+	$xml_path = $this->xml_directory_path.$relvar_name.'.xml';
+	
+	if(!file_exists($xml_path))
+	{
+	  $this->notice['Form Option'] = 'Specified XML file does not exist!';
+	}
+	else
+	{
+	  $this->notice = array(); //think twice..
+	  $option_xml = new DomDocument;
+	  $option_xml->load($xml_path);
+	  if(!$option_xml)                                                          //File exists but empty
+	  {
+	    $this->notice['Form Option'] = 'Specified XML file is empty!';
+	  }
+	  else                                                                      //If XML successfully Loaded...
+	  {
+	    $option = new simpleXMLElement($option_xml->saveXML());
+		if(trim($option->relvar) != $relvar_name)                               //
+		{
+		  $this->notice['Form Option'] = 'Specified XML contains invalid elements!';
+		}
+	    //$option = simplexml_import_dom($option_xml);
+		else
+		{
+		  foreach($option->action as $action)
+	      {
+	        $form_id = $action->attribute;
+		    if($action->prefetch)													//Prepare prefetched dropdown
+		    {
+		      $prftch_relvar = (string)$action->prefetch->prftch_relvar;
+		      $prftch_attribute = (string)$action->prefetch->prftch_attribute;
+		  
+		      $num_raw_result = 0;
+		      $form = new DomDocument('1.0');
+		  
+		      $connDBEHSP = mysql_connect($this->hostname_connDBEHSP, $this->username_connDBEHSP, $this->password_connDBEHSP) or trigger_error(mysql_error(),E_USER_ERROR);
+              mysql_select_db($this->database_connDBEHSP, $connDBEHSP);
+              $query_string_fo = sprintf('select %s from %s;', $prftch_attribute, $prftch_relvar);
+              $raw_result_fo = mysql_query($query_string_fo, $connDBEHSP) or die(mysql_error()); //Query execution
+              $num_raw_result = mysql_num_rows($raw_result_fo);
+		  
+		      $prefetched = false;                                                     //to detect "select" is added
+		      if($num_raw_result>0)                                                    //thtw, optional form elements
+		      {
+		        $prefetched = true;
+		        $select = $form->appendChild($form->createElement('select')); //root
+		        $element_name = $select->appendChild($form->createElement('element_name'));
+			    $element_name->appendChild($form->createTextNode(trim($relvar_name).'_'.trim($prftch_attribute)));  //this form is for relvar_name, not prftch_relvar, prftch_relvar gives a list of values
+		        while($option_element = mysql_fetch_assoc($raw_result_fo))			//Prepare prefetched dropdown
+		        {
+		          $dropdown = $select->appendChild($form->createElement('option'));
+		          $dropdown->appendChild($form->createTextNode($option_element[trim($prftch_attribute)]));
+		        }
+		      }
+	        }
+			
+	        $newentry = $action->newentry;
+	        if($newentry->new_relvar)							//New entry might be needed
+		    {
+			    if(!$prefetched)
+		        {
+				  $form = new DomDocument('1.0');
+			  	  $select = $form->appendChild($form->createElement('select')); //root
+		          $element_name = $select->appendChild($form->createElement('element_name'));
+			      $element_name->appendChild($form->createTextNode(trim($relvar_name).'_'.trim($prftch_attribute)));
+			    }
+		        $new_relvar = (string)$newentry->new_relvar;
+		        $dropdown = $select->appendChild($form->createElement('option'));
+				$dropdown->appendChild($form->createTextNode('New Entry in '.trim($new_relvar)));
+		    }
+
+		//$form->formatOutput = true;
+            if($form != '')                                          //thtw: form is not empty
+		    {
+		      $xsl = new DOMDocument();
+		  
+              if(file_exists($this->xsl_directory_path.$form_option_xsl))
+	          {
+		        $xsl->load($this->xsl_directory_path.$form_option_xsl);
+			    $xslt = new XSLTProcessor();
+	            $xslt->importStylesheet($xsl);
+	            $optional_form = $xslt->transformToXML($form);
+			
+		        $this->form_option_array[$relvar_name][$prftch_attribute] = $optional_form;//->saveXML();
+	
+		        //$this->form_option_array[$relvar_name][$new_relvar] = $optional_form;//->saveXML();
+
+	          }
+		      else
+		      {
+		        $this->notice['Form Option XSL'] = 'Specified XSL does not exist: '.$this->xsl_directory_path.$form_option_xsl;
+		      }
+		    }
+	      }
+		}
+	  }
+    }
+  }
+}
+?>

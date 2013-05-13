@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<formoption>
+
+ <relvar>
+   dna
+ </relvar>
+ 
+ <action>
+   <attribute>
+    section_code
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       container
+     </prftch_relvar>
+     <prftch_attribute>
+       section_code
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       container
+     </new_relvar>
+   </newentry>
+   
+ </action>
+ 
+  <action>
+   <attribute>
+    box_code
+   </attribute>
+   
+   <asyncfetch>
+     <async_relvar>
+       container
+     </async_relvar>
+     <async_attribute>
+       box_code
+     </async_attribute>
+   </asyncfetch>
+ </action>
+ 
+<action>
+   <attribute>
+    cabinet_code
+   </attribute>
+   
+   <asyncfetch>
+     <async_relvar>
+       container
+     </async_relvar>
+     <async_attribute>
+       cabinet_code
+     </async_attribute>
+   </asyncfetch>
+ </action>
+ 
+  <action>
+   <attribute>
+    abbr4_organization
+   </attribute>
+   
+   <prefetch>
+     <prftch_relvar>
+       organization
+     </prftch_relvar>
+     <prftch_attribute>
+       abbr4_organization
+     </prftch_attribute>
+   </prefetch>
+   
+   <newentry>
+     <new_relvar>
+       organization
+     </new_relvar>
+   </newentry>
+ </action>
+ 
+ 
+</formoption>
